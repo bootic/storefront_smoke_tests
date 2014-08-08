@@ -35,6 +35,11 @@ describe 'simplelist.bootic.dev', type: :feature do
       expect(page).to have_link("Ofertas")
     end
 
+    it 'has product images' do
+      within '.products .item-1' do
+        expect(page).to have_product_image
+      end
+    end
     it 'starts with an empty cart' do
       within '.ajax_cart' do
         expect(page).to have_content 'Carro vacío'
@@ -69,6 +74,28 @@ describe 'simplelist.bootic.dev', type: :feature do
           click_on '-'
           expect(page).not_to have_content('(Default) Pony Blue')
         end
+      end
+    end
+
+    describe 'visiting pages' do
+
+    end
+
+    describe 'listing all products' do
+
+      describe 'viewing product details' do
+
+      end
+    end
+
+    describe 'using forms' do
+
+    end
+
+    describe 'reading the blog' do
+
+      describe 'reading a single post' do
+
       end
     end
   end
