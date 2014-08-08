@@ -78,6 +78,14 @@ describe 'simplelist.bootic.dev', type: :feature do
     end
 
     describe 'visiting pages' do
+      before do
+        click_on 'Despachos'
+      end
+
+      it 'shows page content' do
+        expect(page).to have_content 'Despachos'
+        expect(page).to have_content "Información sobre despachos y devoluciones de tus productos"
+      end
 
     end
 
