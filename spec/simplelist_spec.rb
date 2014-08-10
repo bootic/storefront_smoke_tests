@@ -140,7 +140,18 @@ describe 'simplelist.bootic.dev', type: :feature do
           end
 
           describe 'checking out' do
+            before do
+              within '.ajax_cart' do
+                click_on 'Comprar »'
+              end
+            end
 
+            it 'shows checkout page' do
+              expect(page).to have_content 'Simple List'
+              expect(page).to have_content 'Realizar nueva compra'
+              expect(page).to have_content '$120.000'
+              expect(page).to have_content 'Datos de contacto'
+            end
           end
         end
       end
