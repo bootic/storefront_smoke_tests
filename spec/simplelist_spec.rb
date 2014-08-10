@@ -90,6 +90,28 @@ describe 'simplelist.bootic.dev', type: :feature do
     end
 
     describe 'listing all products' do
+      before do
+        click_on 'Productos'
+      end
+
+      it 'lists products' do
+        within '.products' do
+          expect(page).to have_content 'Unicorn Flux'
+          expect(page).to have_content 'Swoosh'
+          expect(page).to have_content 'Pony Blue'
+          expect(page).to have_content 'Buzzy'
+        end
+      end
+
+      describe 'filtering by tag' do
+        it 'filters products' do
+          within '.products' do
+            click_on 'urban'
+            expect(page).to have_content 'Unicorn Flux'
+            expect(page).not_to have_content 'Pony Blue'
+          end
+        end
+      end
 
       describe 'viewing product details' do
 
