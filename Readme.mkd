@@ -14,3 +14,5 @@ Note: the test suite depends on Selenium-Webdriver to run in-browser tests. The 
 ## Run tests
 
     $ bundle exec rspec spec/simplelist_spec.rb
+
+Note: the tests assume you host Bootic test shops under the `[subdomain].bootic.dev` domain, for example using [Pow](http://pow.cx/).
