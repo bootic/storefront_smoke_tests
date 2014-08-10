@@ -177,10 +177,31 @@ describe 'simplelist.bootic.dev', type: :feature do
     end
 
     describe 'reading the blog' do
+      before do
+        click_on 'Blog'
+      end
+
+      it 'shows blog posts' do
+        expect(page).to have_content 'Últimas noticias'
+        expect(page).to have_content 'Éste es la primera noticia publicada en tu tienda.'
+        expect(page).to have_link 'Primera noticia!'
+        expect(page).to have_link 'Nuevos productos en catálogo'
+      end
 
       describe 'reading a single post' do
+        before do
+          click_on 'Primera noticia!'
+        end
 
+        it 'shows blog post details' do
+          expect(page).to have_content 'Éste es la primera noticia publicada en tu tienda. Bórrala o edítala y continúa manteniendo el blog!'
+          expect(page).not_to have_content 'Nuevos productos en catálogo'
+        end
       end
+    end
+
+    describe 'searching' do
+
     end
   end
 end
