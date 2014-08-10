@@ -1,0 +1,16 @@
+## Regression tests for Bootic storefronts
+
+These tests verify general correct functioning of key Bootic storefronts,
+in preparation for refactoring and/or rewriting the underlying applications.
+
+## Install
+
+    $ git clone git@github.com:bootic/storefront_smoke_tests.git
+    $ cd storefront_smoke_tests
+    $ bundle install
+
+Note: the test suite depends on Selenium-Webdriver to run in-browser tests. The Firefox browser must be installed.
+
+## Run tests
+
+    $ bundle exec rspec spec/simplelist_spec.rb
