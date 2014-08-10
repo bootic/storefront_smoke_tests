@@ -114,7 +114,31 @@ describe 'simplelist.bootic.dev', type: :feature do
       end
 
       describe 'viewing product details' do
+        before do
+          click_on 'Pony Blue por Buzzy'
+        end
 
+        it 'shows product info' do
+          expect(page).to have_content 'Pony Blue por Buzzy'
+          expect(page).to have_content '$120.000'
+          expect(page).to have_content 'Este es un producto de ejemplo en Bootic.'
+        end
+
+        describe 'adding to cart' do
+          before do
+            within '.cart_and_price' do
+              click_on 'Agregar al carro'
+            end
+          end
+
+          it 'adds product to Ajax cart' do
+            within '.ajax_cart' do
+              expect(page).not_to have_content 'Carro vacío'
+              expect(page).to have_content('(Default) Pony Blue')
+              expect(page).to have_content('$120.000')
+            end
+          end
+        end
       end
     end
 
