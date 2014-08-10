@@ -201,7 +201,14 @@ describe 'simplelist.bootic.dev', type: :feature do
     end
 
     describe 'searching' do
+      before do
+        fill_in 'q', with: 'pony'
+      end
 
+      it 'shows results' do
+        expect(page).to have_link 'Pony Blue por Buzzy'
+        expect(page).not_to have_link 'XY Vision por Daylite'
+      end
     end
   end
 end
