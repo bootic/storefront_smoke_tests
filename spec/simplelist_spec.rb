@@ -138,12 +138,42 @@ describe 'simplelist.bootic.dev', type: :feature do
               expect(page).to have_content('$120.000')
             end
           end
+
+          describe 'checking out' do
+
+          end
         end
       end
     end
 
     describe 'using forms' do
+      before do
+        click_on 'Contacto'
+      end
 
+      it 'shows form info' do
+        expect(page).to have_content 'Ponte en contacto con nosotros. Te responderemos cuanto antes.'
+      end
+
+      describe 'validations' do
+        it 'shows errors' do
+          click_on 'Enviar!'
+          expect(page).to have_content '1 error impide enviar este formulario'
+        end
+      end
+
+      describe 'success' do
+        before do
+          fill_in 'Nombre y apellido', with: 'Foo Bar'
+          fill_in 'Email', with: 'foo@bar.com'
+          fill_in 'Teléfono', with: '1234567890'
+          click_on 'Enviar!'
+        end
+
+        it 'sends the form and displays feedback' do
+          expect(page).to have_content 'Mensaje enviado. Muchas gracias!'
+        end
+      end
     end
 
     describe 'reading the blog' do
