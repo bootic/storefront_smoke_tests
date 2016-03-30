@@ -1,10 +1,10 @@
 require 'spec_helper'
 
-describe 'simplelist.bootic.dev', type: :feature do
+site = ENV['TEST_HOST'] || 'http://simpleliststaging.bootic-shops.com'
+describe site, type: :feature do
   before :all do
-    Capybara.app_host = ENV['TEST_HOST'] || 'http://simplelist.booticfront.dev'
+    Capybara.app_host = site
   end
-
 
   describe 'homepage' do
     before do
@@ -12,11 +12,12 @@ describe 'simplelist.bootic.dev', type: :feature do
     end
 
     it 'shows highlighted products' do
-      expect(page).to have_content("Pony Blue")
-      expect(page).to have_content("Buzzy")
-      expect(page).to have_content("Stallion II")
-      expect(page).to have_content("Lightrek")
-      expect(page).to have_content("Este es un producto de ejemplo en Bootic")
+      within '#main' do
+        expect(page).to have_content 'Productos destacados'
+        expect(page).to have_content("XY Vision")
+        expect(page).to have_content("Pony Blue")
+        expect(page).to have_content("Stallion II")
+      end
     end
 
     it 'has main navigation' do
@@ -37,7 +38,7 @@ describe 'simplelist.bootic.dev', type: :feature do
 
     it 'has product images' do
       within '.products .item-1' do
-        expect(page).to have_product_image
+        expect(page).to have_product_image('staging.btcdn.co')
       end
     end
     it 'starts with an empty cart' do
@@ -56,8 +57,8 @@ describe 'simplelist.bootic.dev', type: :feature do
       it 'adds product to the cart' do
         within '.ajax_cart' do
           expect(page).not_to have_content 'Carro vacío'
-          expect(page).to have_content('(Default) Pony Blue')
-          expect(page).to have_content('$120.000')
+          expect(page).to have_content('(Default) XY Vision')
+          expect(page).to have_content('$16.000')
         end
       end
 
@@ -65,14 +66,14 @@ describe 'simplelist.bootic.dev', type: :feature do
         within '.ajax_cart ul.items li' do
           fill_in 'quantity', with: 2
           page.execute_script('$("input[name=quantity]").blur()') # blur
-          expect(page).to have_content('$240.000')
+          expect(page).to have_content('$32.000')
         end
       end
 
       it 'can remove product from the cart' do
         within '.ajax_cart' do
           click_on '-'
-          expect(page).not_to have_content('(Default) Pony Blue')
+          expect(page).not_to have_content('(Default) XY Vision')
         end
       end
     end
@@ -96,10 +97,11 @@ describe 'simplelist.bootic.dev', type: :feature do
 
       it 'lists products' do
         within '.products' do
-          expect(page).to have_content 'Unicorn Flux'
-          expect(page).to have_content 'Swoosh'
+          expect(page).to have_content 'Boomblock AB'
+          expect(page).to have_content 'XY Vision'
           expect(page).to have_content 'Pony Blue'
-          expect(page).to have_content 'Buzzy'
+          expect(page).to have_content 'Unicorn Flux'
+          expect(page).to have_content 'Stallion II'
         end
       end
 
@@ -115,11 +117,13 @@ describe 'simplelist.bootic.dev', type: :feature do
 
       describe 'viewing product details' do
         before do
-          click_on 'Pony Blue por Buzzy'
+          within '.products .item-3' do
+            click_on 'Pony Blue', match: :first
+          end
         end
 
         it 'shows product info' do
-          expect(page).to have_content 'Pony Blue por Buzzy'
+          expect(page).to have_content 'Pony Blue'
           expect(page).to have_content '$120.000'
           expect(page).to have_content 'Este es un producto de ejemplo en Bootic.'
         end
@@ -147,7 +151,7 @@ describe 'simplelist.bootic.dev', type: :feature do
             end
 
             it 'shows checkout page' do
-              expect(page).to have_content 'Simple List'
+              expect(page).to have_content 'Simplelist'
               expect(page).to have_content 'Realizar nueva compra'
               expect(page).to have_content '$120.000'
               expect(page).to have_content 'Datos de contacto'
@@ -169,7 +173,7 @@ describe 'simplelist.bootic.dev', type: :feature do
       describe 'validations' do
         it 'shows errors' do
           click_on 'Enviar!'
-          expect(page).to have_content '1 error impide enviar este formulario'
+          expect(page).to have_content 'Formulario tiene errores'
         end
       end
 
@@ -182,7 +186,7 @@ describe 'simplelist.bootic.dev', type: :feature do
         end
 
         it 'sends the form and displays feedback' do
-          expect(page).to have_content 'Mensaje enviado. Muchas gracias!'
+          expect(page).to have_content 'Mensaje enviado'
         end
       end
     end
@@ -194,7 +198,6 @@ describe 'simplelist.bootic.dev', type: :feature do
 
       it 'shows blog posts' do
         expect(page).to have_content 'Últimas noticias'
-        expect(page).to have_content 'Éste es la primera noticia publicada en tu tienda.'
         expect(page).to have_link 'Primera noticia!'
         expect(page).to have_link 'Nuevos productos en catálogo'
       end
@@ -205,7 +208,7 @@ describe 'simplelist.bootic.dev', type: :feature do
         end
 
         it 'shows blog post details' do
-          expect(page).to have_content 'Éste es la primera noticia publicada en tu tienda. Bórrala o edítala y continúa manteniendo el blog!'
+          expect(page).to have_content 'Ésta es la primera noticia publicada en tu tienda. Bórrala o edítala y continúa manteniendo el blog!'
           expect(page).not_to have_content 'Nuevos productos en catálogo'
         end
       end
@@ -214,11 +217,14 @@ describe 'simplelist.bootic.dev', type: :feature do
     describe 'searching' do
       before do
         fill_in 'q', with: 'pony'
+        find('input[name=q]').native.send_keys(:return)
       end
 
       it 'shows results' do
-        expect(page).to have_link 'Pony Blue por Buzzy'
-        expect(page).not_to have_link 'XY Vision por Daylite'
+        within '.products' do
+          expect(page).to have_link 'Pony Blue'
+          expect(page).not_to have_link 'XY Vision'
+        end
       end
     end
   end
