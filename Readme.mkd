@@ -5,6 +5,8 @@ in preparation for refactoring and/or rewriting the underlying applications.
 
 ## Install
 
+    brew install phantomjs
+
     $ git clone git@github.com:bootic/storefront_smoke_tests.git
     $ cd storefront_smoke_tests
     $ bundle install
