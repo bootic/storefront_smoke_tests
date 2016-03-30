@@ -9,9 +9,11 @@ in preparation for refactoring and/or rewriting the underlying applications.
     $ cd storefront_smoke_tests
     $ bundle install
 
-Note: the test suite depends on Selenium-Webdriver to run in-browser tests. The Firefox browser must be installed.
-
 ## Run tests
 
-    $ TEST_HOST=http://tienda.bootic.net bundle exec rspec spec/simplelist_spec.rb
+    $ bundle exec rspec
+
+Or tests for individual shops
+
+    $ bundle exec rspec spec/simplelist_spec.rb
 
