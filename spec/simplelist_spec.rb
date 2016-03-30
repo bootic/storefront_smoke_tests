@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe 'simplelist.bootic.dev', type: :feature do
   before :all do
-    Capybara.app_host = 'http://simplelist.bootic.dev'
+    Capybara.app_host = ENV['TEST_HOST'] || 'http://simplelist.booticfront.dev'
   end
 
 
